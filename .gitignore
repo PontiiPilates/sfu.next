@@ -1,0 +1,5 @@
+.old_code/
+.vscode/
+bootstrap/
+core/
+modules/search/miniatures/avatars/*.jpeg
