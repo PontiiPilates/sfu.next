@@ -10,7 +10,7 @@ $query = $_GET['search'];
 
 if ($query) {
 
-    $sql = "SELECT id, source, name, alias, description, link, type, file_img FROM search WHERE name LIKE '%$query%' LIMIT 30";
+    $sql = "SELECT id, source, name, alias, description, link, type, filename_img FROM $table WHERE name LIKE '%$query%' LIMIT 10";
     $res = $pdo->query($sql);
     $res = $res->fetchAll(PDO::FETCH_ASSOC);
 

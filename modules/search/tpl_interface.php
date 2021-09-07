@@ -2,6 +2,7 @@
 <html lang="ru">
 
 <head>
+
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,140 +16,147 @@
     <!-- /bootstrap -->
 
     <title>Search</title>
+
 </head>
 
-<body>
-
-    <h3>Поисковой модуль</h3>
-    <i>Кабинет администрирования</i>
-
-    <div class="conteiner-fluid mt-3">
-        <a class="btn btn-outline-success" href="?directive=start">Начать процесс актуализации данных</a>
-    </div>
-    <div class="conteiner-fluid mt-3">
-        <a class="btn btn-outline-dark" href="?directive=clear">Очистить логи</a>
-    </div>
-    <div class="conteiner-fluid mt-3">
-        <a class="btn btn-outline-danger" href="?directive=delete_table_search">Очистить таблицу</a>
-    </div>
-
-    <div class="conteiner-fluid mt-3">
-
-        <?php
-        // $data = $pdo->query("SELECT file_img FROM search");
-        // $data = $data->fetchAll(PDO::FETCH_ASSOC);
-
-        // foreach ($data as $k => $v) {
-        //     if ($v['file_img']) {
-        //         $path = 'miniatures/avatars/' . $v['file_img'];
-        //         echo "<img src='$path' alt='' width='80' height='80'>";
-        //     }
-        // }
-        ?>
-
-    </div>
-
-    <div class="bg-light bg-gradient border border-secondary mt-3">
-        <p>Проверено записей: <b><?php print $_SESSION['logs']['check_count']; ?></b></p>
-        <p>Успешных транзакций: <b><?php print $_SESSION['logs']['insert_count_success']; ?></b></p>
-        <p>Ошибок во время транзакций: <b><?php print $_SESSION['logs']['insert_count_error']; ?></b></p>
-        <?php if ($_SESSION['logs']['insert_erro_row']) : ?>
-            <?php foreach ($_SESSION['logs']['insert_erro_row'] as $k => $v) : ?>
-                <p><small>
-                        <pre>
-                    <?php print_r($v); ?>
-                </pre>
-                    </small></p>
-            <?php endforeach; ?>
-        <?php endif; ?>
-        <p>Сконвертировано изображений: <b><?php print $_SESSION['logs']['image_converter_count']; ?></b></p>
-        <p>На выполнение программы затрачено: <b><?php print $_SESSION['logs']['code_time']; ?></b></p>
-        <p>Файлов удалено: <b><?php print $_SESSION['logs']['files_delete_s']; ?></b></p>
-        <p>Не удалось удалить файлов: <b><?php print $_SESSION['logs']['files_delete_f']; ?></b></p>
-        <p>Таблица очищена: <b><?php print $_SESSION['logs']['drop_table']; ?></b></p>
-    </div>
-
-    <form action="" method="post" class="mt-3">
-        <div>
-            <input type="text" name="search" id="search" placeholder="Начни искать">
-            <input type="submit">
-        </div>
-    </form>
-
-    <?php
-    $query = $_POST['search'];
-
-    //* все это имеет смысл если есть запрос
-    if ($query) {
-
-        $sql = "SELECT id, source, file_img, name FROM search WHERE name LIKE '%$query%'";
-        $res = $pdo->query($sql);
-        $res = $res->fetchAll(PDO::FETCH_ASSOC);
-    }
-    ?>
+<body class="bg-dark text-light">
 
     <div class="container">
 
-        <?php foreach ($res as $k => $v) : ?>
+        <div class="row mt-5">
+            <a href="http://next.sfu-kras.ru/modules/search/controller.php" style="text-decoration: none; color: inherit;">
+                <h3>
+                    Search-модуль<br>
+                    <small class="text-muted">Административная панель</small>
+                </h3>
+                <p class="text-info bg-dark">Alpha-версия 2.0</p>
+            </a>
+        </div>
 
-            <?php
-            if ($v['source'] !== 'structure') {
-                $path = "miniatures/others/{$v['source']}.png";
-            } else {
-                $path = "miniatures/avatars/{$v['file_img']}";
-            }
-            ?>
-
-            <div class="item">
-                <div class="img-box">
-
-                    <img src="<?php print $path; ?>" alt="">
-
-                </div>
-
-                <p><?php print $v['name']; ?></p>
-                <p><?php print $v['id']; ?></p>
-
+        <div class="row mt-5">
+            <div class="col">
+                <table class="table table-dark">
+                    <tr>
+                        <td>Элементов в источнике</td>
+                        <td><b><?= $_SESSION['logs']['Количество элементов в источнике'] ?></b></td>
+                    </tr>
+                    <tr>
+                        <td>Элементов в базе данных</td>
+                        <td><b><?= $_SESSION['logs']['Количество элементов в таблице'] ?></b></td>
+                    </tr>
+                    <tr>
+                        <td>Источников изображений</td>
+                        <td><b><?= $_SESSION['logs']['В базе данных находятся источников изображений'] ?></b></td>
+                    </tr>
+                    <tr>
+                        <td>Изображений на сервере</td>
+                        <td><b><?= $_SESSION['logs']['В файловой системе находится миниатюр'] ?></b></td>
+                    </tr>
+                </table>
             </div>
+            <div class="col">
+            </div>
+            <div class="col">
+                <? if ($_SESSION) : ?>
+                    <?php foreach ($_SESSION['logs'] as $k => $v) : ?>
+                        <small><?= $k ?>: <b><?= $v ?></b></small></br>
+                    <?php endforeach; ?>
+                <? endif; ?>
+            </div>
+        </div>
 
-        <?php endforeach; ?>
+        <div class="row mt-5">
+            <div class="col">
+                <div class="conteiner-fluid mt-3">
+                    <a class="btn btn-secondary w-100" href="?directive=uploader">Первичное наполнение таблицы</a>
+                </div>
+                <div class="conteiner-fluid mt-3">
+                    <a class="btn btn-warning w-100" href="?directive=lg_cleaner">Очистить логи</a>
+                </div>
+                <div class="conteiner-fluid mt-3">
+                    <a class="btn btn-primary w-100" href="?directive=db_status">Обновить статус</a>
+                </div>
+            </div>
+            <div class="col">
+                <div class="conteiner-fluid mt-3">
+                    <a class="btn btn-success w-100" href="?directive=actualize_updater">Дополнить базу данных</a>
+                </div>
+                <div class="conteiner-fluid mt-3">
+                    <a class="btn btn-success w-100" href="?directive=actualize_deleter">Снять с публикации</a>
+                </div>
+                <div class="conteiner-fluid mt-3">
+                    <a class="btn btn-success w-100" href="?directive=img_upload">Создать портреты</a>
+                </div>
+            </div>
+            <div class="col">
+                <div class="conteiner-fluid mt-3">
+                    <a class="btn btn-danger w-100" href="?directive=img_delete">Удалить все изображения</a>
+                </div>
+                <div class="conteiner-fluid mt-3">
+                    <a class="btn btn-danger w-100" href="?directive=db_cleaner">Удалить базу данных</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-5">
+            <form action="" method="post">
+                <div>
+                    <table>
+
+                        <tr>
+                            <td class="w-100">
+                                <input class="form-control" type="text" name="search" id="search" placeholder="Начни искать">
+                            </td>
+                            <td class="ml-3 ps-3">
+                                <input class="btn btn-primary" type="submit" value="Искать">
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </form>
+        </div>
+
+        <?php
+        $query = $_POST['search'];
+
+        if ($query) {
+
+            $sql = "SELECT id, source, name, description, filename_img FROM $table WHERE name LIKE '%$query%'";
+            $res = $pdo->query($sql);
+            $res = $res->fetchAll(PDO::FETCH_ASSOC);
+        }
+        ?>
+
+        <div class="row mt-3">
+            <table class="table table-borderless text-light">
+                <?php foreach ($res as $k => $v) : ?>
+                    <?php
+                    $thumbler = NULL;
+                    if ($v['source'] !== 'structure') {
+                        $path = "miniatures/others/{$v['source']}.png";
+                    } else {
+                        if (!$v['filename_img']) {
+                            $path = "miniatures/others/structure.png";
+                        } else {
+                            $thumbler = 1;
+                            $path = "miniatures/avatars/{$v['filename_img']}?v=1";
+                        }
+                    }
+                    ?>
+                    <tr>
+                        <td rowspan="2">
+                            <img src="<?= $path ?>" <?php if ($thumbler) print 'width="60" height="60"' ?> alt="">
+                        </td>
+                        <td width="100%"><b><?= $v['name'] ?></b></td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #373b3e;">
+                        <td width="100%"><small><?= $v['description'] ?></small></td>
+                    </tr>
+                <?php endforeach; ?>
+            </table>
+        </div>
 
     </div>
-
-
-    <script src="functions.js"></script>
-
-    <style>
-        body {
-            text-align: center;
-        }
-
-        .container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-
-        }
-
-        .item {
-            border: 1px solid gray;
-            text-align: center;
-        }
-
-        .item>p {
-            width: 100px;
-        }
-
-        .img-box {
-            width: 100px;
-            height: 100px;
-            overflow: hidden;
-        }
-
-        .img-box>img {
-            width: 100px;
-        }
-    </style>
 
 </body>
 
