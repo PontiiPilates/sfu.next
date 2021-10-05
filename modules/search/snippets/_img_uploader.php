@@ -55,8 +55,10 @@ function _img_uploader($source)
     // масштабирование изображения
     $image = imagescale($image, $scale_x, $scale_y);
 
+    global $temporary_storage;
+
     // генерация пути и имени файла
-    $dir_name = 'miniatures/avatars/';
+    $dir_name = "miniatures/$temporary_storage/";
     $hash = 'qwertyuiopasdfghjklzxcvbnm';
     $hash = str_shuffle($hash);
     $hash = mb_strimwidth($hash, 0, 5);
@@ -68,13 +70,16 @@ function _img_uploader($source)
     switch ($info['mime']) {
         case 'image/png';
             // сохранение объекта в пнг
-            $image = imagepng($image, $full_path);
+            if (!imagepng($image, $full_path)) exit('Не удалось сохранить объект GdImage в .png-файл');
             break;
         case 'image/jpeg';
             // сохранение объекта в джпг
-            $image = imagejpeg($image, $full_path);
+            if (!imagejpeg($image, $full_path)) exit('Не удалось сохранить объект GdImage в .png-файл');
             break;
     }
+
+    // очистка памяти посредствам уничтожения объекта GdImage
+    if (!imagedestroy($image)) exit('Очистка памяти не произведена');
 
     return $file_name;
 }
@@ -87,15 +92,16 @@ function _img_uploader($source)
 global $pdo;
 
 // предоставление доступа к рабочей таблице
-global $table;
+global $next_table;
 
 // старт таймера
 $time_start = microtime(true);
 
 // получение ссылок на исходные изображения и идентификаторов их строк
-$data = $pdo->query("SELECT id, source_img FROM $table WHERE source_img != '' AND source_img != 'unknown' AND filename_img = ''");
+$data = $pdo->query("SELECT id, source_img FROM $next_table WHERE source_img != '' AND source_img != 'unknown' AND filename_img = ''");
 $data = $data->fetchAll(PDO::FETCH_OBJ);
 
+// очистка таблицы от имен сконвертированных изображений
 // UPDATE `search_2` SET filename_img = '' WHERE source_img = 'unknown'
 
 // исполнение сценария 
@@ -110,24 +116,17 @@ if ($data) {
         $id = $v->id;
 
         // конвертация изображения, его сохранение и получение имени этого файла
-        $filename = _img_uploader($source_img);
-
-        // проверка конвертации
-        if ($filename) {
-            $_SESSION['logs']['Сконвертировано изображений']++;
-        } else {
-            $_SESSION['logs']['Ошибок при конвертации']++;
-        }
+        if (!$filename = _img_uploader($source_img)) die('Не удалось получить имя сконвертированного изображения');
 
         // добавление новых имен изображений в базу данных
-        $sql = $pdo->exec("UPDATE $table SET filename_img = '$filename' WHERE id = '$id'");
+        $sql = "UPDATE $next_table SET filename_img = '$filename' WHERE id = '$id'";
+        if (!$sql = $pdo->exec($sql)) die('Не удалось добавить имя сконвертированного изображения в базу данных');
 
-        // проверка добавления новых имен изображений в базу данных
-        if ($sql) {
-            $_SESSION['logs']['Сохранено в базе данных']++;
-        } else {
-            $_SESSION['logs']['Ошибок при сохранении в базу данных']++;
-        }
+        // счётчик для интерфейса
+        $_SESSION['logs']['Произведено портретов']++;
+
+        // остановка выполнения программы
+        // _stop($time_start);
     }
 }
 

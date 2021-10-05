@@ -1,16 +1,41 @@
 <?php
 // $time_start = microtime(true);
+header("Access-Control-Allow-Origin: *");
 
 header("Content-type: application/json");
 
 require('functions.php');
 
 $query = $_GET['search'];
-// $query = $_POST['search'];
 
 if ($query) {
 
-    $sql = "SELECT id, source, name, alias, description, link, type, filename_img FROM $table WHERE name LIKE '%$query%' LIMIT 10";
+    // начальный запрос
+    $sql = "SELECT id, source, name, alias, description, link, type, filename_img, created_source FROM $current_table WHERE name LIKE '%$query%' ORDER BY created_source DESC LIMIT 7";
+
+    // разбиение запроса на отдельные слова
+    $words = explode(' ', $query);
+
+    // проверка элементов в получившемся массиве
+    if (count($words) > 1) {
+
+        // стартовая часть конструкции запроса
+        $consctruct = "name like '%{$words[0]}%'";
+
+        // удаление ее из последующего участия
+        unset($words[0]);
+
+        // обход оставшихся элементов массива
+        foreach ($words as $v) {
+
+            // достраивание части конструкции запроса
+            $consctruct .= " and name like '%$v%'";
+        }
+
+        // применение завершенной части строки запроса
+        $sql = "SELECT id, source, name, alias, description, link, type, filename_img, created_source FROM $current_table WHERE ($consctruct) ORDER BY created_source DESC LIMIT 10";
+    }
+
     $res = $pdo->query($sql);
     $res = $res->fetchAll(PDO::FETCH_ASSOC);
 

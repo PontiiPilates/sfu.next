@@ -5,4 +5,4 @@
  */
 
 unset($_SESSION['logs']);
-_to_general();  
+_to_general();

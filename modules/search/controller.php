@@ -11,29 +11,43 @@ require('functions.php');
  * Маршрутизация
  */
 
-//! первичное наполнение таблицы
-route('uploader', '_db_uploader.php');
-
-//! очистка таблицы
-route('db_cleaner', '_db_cleaner.php');
+//! запрос статуса
+route('db_status', '_db_status.php');
 
 //! очистка логов
 route('lg_cleaner', '_lg_cleaner.php');
 
-//! актуализация базы данных в сторону добавления
-route('actualize_updater', '_db_actualize_updater.php');
+/**
+ * Администрирование базы данных
+ */
 
-//! актуализация базы данных в сторону удаления
-route('actualize_deleter', '_db_actualize_deleter.php');
+//! создание новой таблицы в базе данных
+route('db_create', '_db_create.php');
 
-//! запрос статуса
-route('db_status', '_db_status.php');
+//! первичное наполнение новой таблицы
+route('db_uploader', '_db_uploader.php');
 
-//! создать аватарки
+//! переключение на использование новой таблицы
+route('db_switch', '_db_switch.php');
+
+//! удаление всех таблиц кроме текущей
+route('db_cleaner', '_db_cleaner.php');
+
+/**
+ * Администрирование файлового хранилища
+ */
+
+//! создание временного хранилища
+route('dir_create', '_dir_create.php');
+
+//! создание портреты сотрудников
 route('img_upload', '_img_uploader.php');
 
-//! очистить файлы на сервере
-route('img_delete', '_img_deleter.php');
+//! переключение с прежнего хранилища на следующее
+route('dir_rename', '_dir_rename.php');
+
+//! удаление прежнего хранилища
+route('dir_delete', '_dir_delete.php');
 
 /**
  * Интерфейс

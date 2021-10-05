@@ -29,7 +29,6 @@ function route($get, $snippet)
     if ($_GET['directive'] == $get) {
         require("snippets/$snippet");
     }
-
 }
 
 /**
@@ -45,11 +44,17 @@ function _time_metric($time_start)
     return $_SESSION['logs']['Выполнение программы заняло'] = $time_length;
 }
 
-
-
 /**
- * Полезные функции
+ * Останавливает работу программы, если ее выполнение занимает больше положенного времени
+ * Перед выполнением программы необходимо добавить @param: $time_start = microtime(true);
+ * Определение лимита находится: \core\config.php
  */
+function _stop($time_start)
+{
+    // предоставление доступа к параметру конфигурации
+    global $time_limit;
 
-// microtime(true); // возвращает метку времени с микросекундами после запятой
-// number_format($num, value); // возвращает число отформатированное до количества знаков value после запятой
+    $now = time() - $time_start;
+
+    if ($now > $time_limit) die(_to_general());
+}

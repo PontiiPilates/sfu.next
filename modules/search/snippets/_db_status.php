@@ -11,7 +11,7 @@ function _db_status()
     global $pdo;
 
     // предоставление доступа к рабочей таблице
-    global $table;
+    global $current_table;
 
     // предоставление доступа к источникам данных
     global $sources;
@@ -44,7 +44,7 @@ function _db_status()
     }
 
     // получение количества элементов поисковой выдачи, хранимых в базе данных
-    $counter_items_table = $pdo->query("SELECT COUNT(*) FROM $table WHERE status = 1");
+    $counter_items_table = $pdo->query("SELECT COUNT(*) FROM $current_table WHERE status = 1");
     $counter_items_table = $counter_items_table->fetchColumn();
 
     // сохранение значений в сессии
@@ -66,7 +66,7 @@ function _db_status()
     $_SESSION['logs']['В файловой системе находится миниатюр'] = count($names_in_files);
     
     // получение ссылок на исходные изображения и идентификаторов их строк
-    $data = $pdo->query("SELECT COUNT(*) FROM $table WHERE source_img != '' AND source_img != 'unknown'");
+    $data = $pdo->query("SELECT COUNT(*) FROM $current_table WHERE source_img != '' AND source_img != 'unknown'");
     $data = $data->fetchAll(PDO::FETCH_COLUMN);
 
     $_SESSION['logs']['В базе данных находятся источников изображений'] = $data[0];

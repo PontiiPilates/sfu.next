@@ -66,34 +66,47 @@
         </div>
 
         <div class="row mt-5">
+            <!-- <p><small>TODO: оптимизировать поисковую таблицу базы данных таким образом, чтобы от источника добавлять метку материала mark вместо id. Поскольку id для последующей таблицы и предыдущей с момента появления новых материалов становятся различными, то идентифицировать материалы по id - невозможно, а по link - слишком долго. Поэтому нужно компромиссное решение, но уникальное.</small></p> -->
+            <!-- <p><small>TODO: сделать менеджмент баз данных повторяющим принцип менеджмента дирректорий.</small></p> -->
+            <p><small>TODO: протестировать работу функционала, сделать коммит.</small></p>
+        </div>
+
+
+        <div class="row mt-5">
             <div class="col">
                 <div class="conteiner-fluid mt-3">
-                    <a class="btn btn-secondary w-100" href="?directive=uploader">Первичное наполнение таблицы</a>
+                    <a class="btn btn-info w-100" href="?directive=db_status">Обновить статус</a>
                 </div>
                 <div class="conteiner-fluid mt-3">
                     <a class="btn btn-warning w-100" href="?directive=lg_cleaner">Очистить логи</a>
                 </div>
+            </div>
+            <div class="col">
                 <div class="conteiner-fluid mt-3">
-                    <a class="btn btn-primary w-100" href="?directive=db_status">Обновить статус</a>
+                    <a class="btn btn-secondary w-100" href="?directive=db_create">Создать новую таблицу</a>
+                </div>
+                <div class="conteiner-fluid mt-3">
+                    <a class="btn btn-secondary w-100" href="?directive=db_uploader">Наполнить новую таблицу</a>
+                </div>
+                <div class="conteiner-fluid mt-3">
+                    <a class="btn btn-secondary w-100" href="?directive=db_switch">Использовать новую таблицу</a>
+                </div>
+                <div class="conteiner-fluid mt-3">
+                    <a class="btn btn-danger w-100" href="?directive=db_cleaner">Удалить прежнюю таблицу</a>
                 </div>
             </div>
             <div class="col">
                 <div class="conteiner-fluid mt-3">
-                    <a class="btn btn-success w-100" href="?directive=actualize_updater">Дополнить базу данных</a>
+                    <a class="btn btn-secondary w-100" href="?directive=dir_create">Создать временное хранилище</a>
                 </div>
                 <div class="conteiner-fluid mt-3">
-                    <a class="btn btn-success w-100" href="?directive=actualize_deleter">Снять с публикации</a>
+                    <a class="btn btn-secondary w-100" href="?directive=img_upload">Создать портреты сотрудников</a>
                 </div>
                 <div class="conteiner-fluid mt-3">
-                    <a class="btn btn-success w-100" href="?directive=img_upload">Создать портреты</a>
-                </div>
-            </div>
-            <div class="col">
-                <div class="conteiner-fluid mt-3">
-                    <a class="btn btn-danger w-100" href="?directive=img_delete">Удалить все изображения</a>
+                    <a class="btn btn-secondary w-100" href="?directive=dir_rename">Использовать новое хранилище</a>
                 </div>
                 <div class="conteiner-fluid mt-3">
-                    <a class="btn btn-danger w-100" href="?directive=db_cleaner">Удалить базу данных</a>
+                    <a class="btn btn-danger w-100" href="?directive=dir_delete">Удалить прежнее хранилище</a>
                 </div>
             </div>
         </div>
@@ -117,14 +130,48 @@
         </div>
 
         <?php
+
+        // замер времени исполнения запроса
+        $time_start = microtime(true);
+
+
         $query = $_POST['search'];
 
         if ($query) {
 
-            $sql = "SELECT id, source, name, description, filename_img FROM $table WHERE name LIKE '%$query%'";
+            // начальный запрос
+            $sql = "SELECT * FROM search_3 WHERE (name like '%$query%')";
+
+            // разбиение запроса на отдельные слова
+            $words = explode(' ', $query);
+
+            // проверка элементов в получившемся массиве
+            if (count($words) > 1) {
+
+                // стартовая часть конструкции запроса
+                $consctruct = "name like '%{$words[0]}%'";
+
+                // удаление ее из последующего участия
+                unset($words[0]);
+
+                // обход оставшихся элементов массива
+                foreach ($words as $v) {
+
+                    // достраивание части конструкции запроса
+                    $consctruct .= " and name like '%$v%'";
+                }
+
+                // применение завершенной части строки запроса
+                $sql = "SELECT * FROM search_3 WHERE ($consctruct)";
+            }
+
             $res = $pdo->query($sql);
             $res = $res->fetchAll(PDO::FETCH_ASSOC);
         }
+
+        // /замер времени исполнения запроса
+        _time_metric($time_start);
+
         ?>
 
         <div class="row mt-3">
@@ -132,8 +179,10 @@
                 <?php foreach ($res as $k => $v) : ?>
                     <?php
                     $thumbler = NULL;
+                    $description = $v['description'];
                     if ($v['source'] !== 'structure') {
                         $path = "miniatures/others/{$v['source']}.png";
+                        $description = date('Y.m.d', $v['created_source']);
                     } else {
                         if (!$v['filename_img']) {
                             $path = "miniatures/others/structure.png";
@@ -143,14 +192,13 @@
                         }
                     }
                     ?>
+
                     <tr>
-                        <td rowspan="2">
-                            <img src="<?= $path ?>" <?php if ($thumbler) print 'width="60" height="60"' ?> alt="">
-                        </td>
+                        <td rowspan="2"><img src="<?= $path ?>" <?php if ($thumbler) print 'width="60" height="60"' ?> alt=""></td>
                         <td width="100%"><b><?= $v['name'] ?></b></td>
                     </tr>
                     <tr style="border-bottom: 1px solid #373b3e;">
-                        <td width="100%"><small><?= $v['description'] ?></small></td>
+                        <td width="100%"><small><?= $description; ?></small></td>
                     </tr>
                 <?php endforeach; ?>
             </table>

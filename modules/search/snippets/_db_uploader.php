@@ -14,7 +14,7 @@ function _db_uploader()
     global $pdo;
 
     // предоставление доступа к рабочей таблице
-    global $table;
+    global $next_table;
 
     // предоставление доступа к источникам данных
     global $sources;
@@ -22,6 +22,7 @@ function _db_uploader()
     // предоставление доступа к источникам данных
     global $sources_limit;
 
+    // ! родительский фрагмент для сниппета _db_actualize_updater.php
     $source                 = '';   // псевдиним источника данных
     $type                   = '';   // тип данных, определенный источником
     $name                   = '';   // заголовок материала
@@ -30,9 +31,12 @@ function _db_uploader()
     $link                   = '';   // ссылка на материал
     $source_img             = '';   // адрес источника изображения
     $filename_img           = '';   // имя файла сконвертированного изображения
-    $create                 = '';   // дата создания записи в человекопонятном формате
+    $created_at             = '';   // дата создания записи
+    $created_source         = '';   // дата появления записи
+    $changed_source         = '';   // дата изменения записи
     $status                 = '';   // участвует в поисковой выдаче или нет
     $weight                 = '';   // вес в поисковой выдаче
+    // ! /родительский фрагмент для сниппета _db_actualize_updater.php
 
     // обход всех источников
     foreach ($sources as $k => $v) {
@@ -54,18 +58,53 @@ function _db_uploader()
         foreach ($data as $mk => $mv) {
 
             // формирование данных для занесения в базу данных
+            // ! родительский фрагмент для сниппета _db_actualize_updater.php
             $type           = $mv->type;
             $name           = $mv->name;
             $description    = $mv->position;
             $link           = $mv->link;
             $source_img     = $mv->avatar;
-            $create         = date('Y-m-d H:i:s');
+            $created_at     = date('Y-m-d H:i:s');
+            $created_source = $mv->created;
+            $changed_source = $mv->changed;
+            // ! /родительский фрагмент для сниппета _db_actualize_updater.php
+
 
             // преобразование некоторых данных
             $name = htmlspecialchars($name, ENT_QUOTES);
 
-            // родительский фрагмент для сниппета _db_actualizer.php
-            $sql = "INSERT INTO $table (`source`,`type`,`name`,`description`,`alias`,`link`,`source_img`,`filename_img`,`create`,`status`,`weight`) VALUES ('$source','$type','$name','$description','','$link','$source_img','$filename_img','$create','1','')";
+            // ! родительский фрагмент для сниппета _db_actualize_updater.php
+            $sql = "INSERT INTO $next_table (
+                    `source`,
+                    `type`,
+                    `name`,
+                    `description`,
+                    `alias`,
+                    `link`,
+                    `source_img`,
+                    `filename_img`,
+                    `created_at`,
+                    `created_source`,
+                    `changed_source`,
+                    `status`,
+                    `weight`
+                ) VALUES (
+                    '$source',
+                    '$type',
+                    '$name',
+                    '$description',
+                    '',
+                    '$link',
+                    '$source_img',
+                    '$filename_img',
+                    '$created_at',
+                    '$created_source',
+                    '$changed_source',
+                    '1',
+                    ''
+                )";
+            // ! /родительский фрагмент для сниппета _db_actualize_updater.php
+
             $sql = $pdo->exec($sql);
 
             // формирование логов о сохранении в базу данных
@@ -86,7 +125,6 @@ function _db_uploader()
 /**
  ** Реализация
  */
-
 $time_start = microtime(true);
 _db_uploader();
 _time_metric($time_start);
