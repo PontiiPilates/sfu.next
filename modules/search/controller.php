@@ -34,6 +34,19 @@ route('db_switch', '_db_switch.php');
 route('db_cleaner', '_db_cleaner.php');
 
 /**
+ * Администрирование таблицы псевдонимов
+ */
+
+//! формирование таблицы псевдонимов
+route('db_aliases_uploader', '_db_aliases_uploader.php');
+
+//! наполнение поисковой таблицы псевыдонимами
+route('db_aliases_exporter', '_db_aliases_exporter.php');
+
+//! очистка таблицы псевдонимов
+route('db_aliases_cleaner', '_db_aliases_cleaner.php');
+
+/**
  * Администрирование файлового хранилища
  */
 

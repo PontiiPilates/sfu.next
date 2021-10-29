@@ -5,6 +5,9 @@
 
   <?php require('chunks/head.php'); ?>
 
+  <?php require('core/config.php'); ?>
+  <?php require('core/contents.php'); ?>
+
 </head>
 
 <body>
@@ -29,16 +32,16 @@
     </div>
   </section>
 
-  <?php // require('chunks/section__slider.php'); ?>
-
   <?php require('chunks/section__ads.php'); ?>
+
+  <?php require('chunks/section__slider.php'); ?>
 
   <?php // require('chunks/section__news.php'); ?>
 
   <?php // require('chunks/section__annonces.php'); ?>
 
   <?php require('chunks/footer.php'); ?>
-  
+
   <?php require('chunks/scripts.php'); ?>
 
 </body>

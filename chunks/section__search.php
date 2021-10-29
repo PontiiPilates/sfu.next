@@ -5,6 +5,7 @@
   <div class="text-area">
     <img src="img/Vector.png" width="17px" height="17px" class="find_button">
     <input type="text" id="search-text" class="find_text" placeholder="Поиск в СФУ..." autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" />
+    <img src="img/VectorDelete.png" width="17px" height="17px" class="delete_button">
   </div>
   <!--/Поисковая строка-->
 

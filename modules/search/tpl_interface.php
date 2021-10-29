@@ -94,6 +94,7 @@
                 <div class="conteiner-fluid mt-3">
                     <a class="btn btn-danger w-100" href="?directive=db_cleaner">Удалить прежнюю таблицу</a>
                 </div>
+
             </div>
             <div class="col">
                 <div class="conteiner-fluid mt-3">
@@ -109,6 +110,21 @@
                     <a class="btn btn-danger w-100" href="?directive=dir_delete">Удалить прежнее хранилище</a>
                 </div>
             </div>
+        </div>
+        <div class="row mt-5">
+            <div class="col">
+                <div class="conteiner-fluid mt-3">
+                    <a class="btn btn-secondary w-100" href="?directive=db_aliases_uploader">Загрузить псевдонимы</a>
+                </div>
+                <div class="conteiner-fluid mt-3">
+                    <a class="btn btn-secondary w-100" href="?directive=db_aliases_exporter">Применить псевдонимы</a>
+                </div>
+                <div class="conteiner-fluid mt-3">
+                    <a class="btn btn-danger w-100" href="?directive=db_aliases_cleaner">Очистить таблицу псевдонимов</a>
+                </div>
+            </div>
+            <div class="col"></div>
+            <div class="col"></div>
         </div>
 
         <div class="row mt-5">

@@ -2,8 +2,8 @@
 <meta name="description" content="" />
 <meta name="keywords" content="" />
 <link rel="stylesheet" type="text/css" href="owl/owl.carousel.min.css" />
-<link rel="stylesheet" type="text/css" href="style.css?2" />
-<link rel="stylesheet" type="text/css" href="modules/search/style.css" />
+<link rel="stylesheet" type="text/css" href="style.css?4" />
+<link rel="stylesheet" type="text/css" href="modules/search/style.css?3" />
 <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap-grid.min.css" />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 <link rel="preconnect" href="https://fonts.gstatic.com" />
