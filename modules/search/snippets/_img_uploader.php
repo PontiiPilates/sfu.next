@@ -92,14 +92,19 @@ function _img_uploader($source)
 global $pdo;
 
 // предоставление доступа к рабочей таблице
-global $next_table;
+global $current_table;
 
 // старт таймера
 $time_start = microtime(true);
 
+
+
+
 // получение ссылок на исходные изображения и идентификаторов их строк
-$data = $pdo->query("SELECT id, source_img FROM $next_table WHERE source_img != '' AND source_img != 'unknown' AND filename_img = ''");
+$data = $pdo->query("SELECT id, source_img FROM $current_table WHERE source_img != '' AND source_img != 'unknown' AND filename_img = ''");
 $data = $data->fetchAll(PDO::FETCH_OBJ);
+
+
 
 // очистка таблицы от имен сконвертированных изображений
 // UPDATE `search_2` SET filename_img = '' WHERE source_img = 'unknown'
@@ -119,7 +124,7 @@ if ($data) {
         if (!$filename = _img_uploader($source_img)) die('Не удалось получить имя сконвертированного изображения');
 
         // добавление новых имен изображений в базу данных
-        $sql = "UPDATE $next_table SET filename_img = '$filename' WHERE id = '$id'";
+        $sql = "UPDATE $current_table SET filename_img = '$filename' WHERE id = '$id'";
         if (!$sql = $pdo->exec($sql)) die('Не удалось добавить имя сконвертированного изображения в базу данных');
 
         // счётчик для интерфейса

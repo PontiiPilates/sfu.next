@@ -843,7 +843,7 @@ footer {
 
 .copyright {
   width     : 100%;
-  border-top: 1px solid #dbdbdb;
+  /* border-top: 1px solid #dbdbdb; */
   padding   : 24px 0;
 }
 

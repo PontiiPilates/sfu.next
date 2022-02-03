@@ -4,6 +4,9 @@ let find_text = document.querySelector(".find_text");
 let find_results = document.querySelector(".find_results");
 let json;
 
+let contFind = document.querySelector(".text-area");
+
+
 function doBold(val, key_name, find_name) {
     let tmp = val.split(" ");
     let poisk = find_name.innerText;
@@ -33,29 +36,15 @@ function mouseAction(val, key_name) {
             this.style.background = '';
         });
         mouse_actions[i].addEventListener('mousedown', function () {
-            let str = this.innerText;
+            let str = this.getAttribute("link");
+            //new///
+            get_json_url = requestURL + this.getAttribute("title");
+            request.open('GET', get_json_url);
+            request.responseType = 'json';
+            request.send();
+            ////
+            window.open(str, '_blank');
 
-            let name_for_sort = str.split("\n\n");
-            let lor;
-            lor = name_for_sort[0].replace(/[^a-zа-яё\s]/gi, '');
-            lor = lor.split(' ').join('');
-
-            let link;
-            json.forEach(function(item){
-                let find_name = document.createElement("p");
-                find_name.innerHTML = item.name;
-                let str1 = find_name.innerText;
-                doBold(val, key_name, find_name);
-                    
-
-                str1 = str1.replace(/[^a-zа-яё\s]/gi, '');
-                str1 = str1.split(' ').join('');
-
-                if (lor == str1) {
-                    link = item.link
-                    window.open(link, '_blank');
-                }
-            });
             return false;
         }); 
     }
@@ -74,7 +63,7 @@ function nothingFind() {
     find_results.appendChild(result);
 }
 
-function drowFindListWithoutDateAndSource(key_name, key_position, key_avatar) {
+function drowFindListWithoutDateAndSource(key_name, key_position, key_avatar, key_link) {
     let result = document.createElement("div");
     result.className = "result";
     let find_name = document.createElement("p");
@@ -92,12 +81,15 @@ function drowFindListWithoutDateAndSource(key_name, key_position, key_avatar) {
     result.appendChild(find_name);
     result.appendChild(find_type);
 
+    result.setAttribute("link", key_link);
+
     find_results.appendChild(result);
+    result.setAttribute("title", key_name);
 
     return find_name;
 }
 
-function drowFindListWithDateAndSource(key_name, date, item, key_source, key_avatar) {
+function drowFindListWithDateAndSource(key_name, date, item, key_source, key_avatar, key_link) {
     let result = document.createElement("div");
     result.className = "result";
     let find_name = document.createElement("p");
@@ -148,6 +140,9 @@ function drowFindListWithDateAndSource(key_name, date, item, key_source, key_ava
     result.appendChild(find_name);
     result.appendChild(find_data);
     result.appendChild(find_link);
+
+    result.setAttribute("link", key_link);
+    result.setAttribute("title", key_name);
 
     find_results.appendChild(result);
 
@@ -225,6 +220,8 @@ function showList(val, requestURL, request, json) {
         let key_name;
         let key_source;
         let key_date;
+        //new
+        let key_link;
         if (json !=  null) {
             if (json.length == 0) {
                 nothingFind();
@@ -235,6 +232,8 @@ function showList(val, requestURL, request, json) {
                 key_position = item.description;
                 key_avatar = findTrueImage(item, key_avatar);
                 key_name = item.name;
+                //new
+                key_link = item.link;
                 key_date =  item.created_source * 1000;
                 let date = new Date();
                 date.setTime(key_date);
@@ -242,10 +241,10 @@ function showList(val, requestURL, request, json) {
                 date = date.getFullYear() + '.' + ('0' + (date.getMonth() + 1)).slice(-2) +  '.' + ('0' + date.getDate()).slice(-2);
 
                 if (key_type == "person" || key_type == "department") {
-                    let find_name = drowFindListWithoutDateAndSource(key_name, key_position, key_avatar);
+                    let find_name = drowFindListWithoutDateAndSource(key_name, key_position, key_avatar, key_link);
                     doBold(val, key_name, find_name);
                 }else {
-                    let find_name = drowFindListWithDateAndSource(key_name, date, item, key_source, key_avatar);
+                    let find_name = drowFindListWithDateAndSource(key_name, date, item, key_source, key_avatar, key_link);
                     doBold(val, key_name, find_name);
                 }
             });
@@ -278,7 +277,10 @@ find_text.onfocus = function(){
 
 //
 
+let count = -1;
+
 find_text.oninput = function(){
+    count = -1;
     let val = this.value.trim();
     get_json_url = requestURL + val;
     request.open('GET', get_json_url);
@@ -300,6 +302,8 @@ find_text.oninput = function(){
         let key_name;
         let key_source;
         let key_date;
+        //new
+        let key_link;
         if (json !=  null) {
 
             if (json.length == 0) {
@@ -312,60 +316,68 @@ find_text.oninput = function(){
                 key_avatar = findTrueImage(item, key_avatar);
                 key_name = item.name;
                 key_date =  item.created_source * 1000;
+                //new
+                key_link = item.link;
                 let date = new Date();
                 date.setTime(key_date);
                 //date = ('0' + date.getDate()).slice(-2) + '.' + ('0' + (date.getMonth() + 1)).slice(-2) + '.' + date.getFullYear();
                 date = date.getFullYear() + '.' + ('0' + (date.getMonth() + 1)).slice(-2) +  '.' + ('0' + date.getDate()).slice(-2);
 
                 if (key_type == "person" || key_type == "department") {
-                    let find_name = drowFindListWithoutDateAndSource(key_name, key_position, key_avatar);
+                    let find_name = drowFindListWithoutDateAndSource(key_name, key_position, key_avatar, key_link);
                     doBold(val, key_name, find_name);
                     
                 }else {
-                    let find_name = drowFindListWithDateAndSource(key_name, date, item, key_source, key_avatar);
+                    let find_name = drowFindListWithDateAndSource(key_name, date, item, key_source, key_avatar, key_link);
                     doBold(val, key_name, find_name);
 
                 }
             });
         }
 
-        mouseAction(val, key_name);  
+        mouseAction(val, key_name);
+
     }
 }
 
 
-let count = -1;
+
 find_text.addEventListener ('keydown', function (event){
     if (event.key == "Enter"){
         let button_actions = document.querySelectorAll(".result");
         let str;
-        let name_for_sort;
         if (count >= 0) {
-            str = button_actions[count].innerText;
-            name_for_sort = str.split("\n\n");
+            str = button_actions[count].getAttribute("link");
+            //new///
+            get_json_url = requestURL + button_actions[count].getAttribute("title");
+            request.open('GET', get_json_url);
+            request.responseType = 'json';
+            request.send();
+            ////
         }
-        json.forEach(function(item){
-            if (item.name == name_for_sort[0]) {
-                links = item.link
-                window.open(links, '_blank');
-            }
-        });
+        window.open(str, '_blank');
+        //new///
+        find_text.blur();
+        deleteList();
+        ////
     }
     if (event.key == "ArrowDown") {
         let button_actions = document.querySelectorAll(".result");
         let tmp = button_actions.length;
         count = findListDown(tmp, count, button_actions, find_text);
-        let str = button_actions[count].innerText;
-        let name_for_sort = str.split("\n\n");
-        find_text.value = name_for_sort[0];
+        if (count >= 0) {
+            str = button_actions[count].getAttribute("title");
+        }
+        find_text.value = str;
     }
     if (event.key == "ArrowUp") {
         let button_actions = document.querySelectorAll(".result");
         let tmp = button_actions.length;
         count = findListUp(tmp, count, button_actions, find_text);
-        let str = button_actions[count].innerText;
-        let name_for_sort = str.split("\n\n");
-        find_text.value = name_for_sort[0];
+        if (count >= 0) {
+            str = button_actions[count].getAttribute("title");
+        }
+        find_text.value = str;
     }  
 });
 

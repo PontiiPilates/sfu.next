@@ -1,0 +1,22 @@
+<IfModule mod_rewrite.c>
+
+RewriteEngine on
+
+# Rewrite all http to https
+# RewriteCond %{HTTPS} off
+# RewriteCond %{HTTP:X-Forwarded-Proto} !https
+# RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+
+# Rewrite all https to http
+# RewriteCond %{HTTP:X-Forwarded-Proto} =https
+# RewriteRule ^(.*)$ http://%{SERVER_NAME}%{REQUEST_URI} [R=301,L]
+
+# Перенаправление с http на https кроме некоторых путей
+RewriteCond %{HTTPS} off
+RewriteCond %{HTTP:X-Forwarded-Proto} !https
+RewriteCond %{THE_REQUEST} !/test.php [NC]      # Кроме путей, которые заканчиваются на /test.php
+RewriteCond %{THE_REQUEST} !/some/ [NC]         # Кроме путей, которые содержат в адресе дирректорию /some/
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+</IfModule>

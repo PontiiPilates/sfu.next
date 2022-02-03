@@ -1,4 +1,4 @@
-<footer class="fixed-bottom">
+<footer class="footer fixed-bottom" style="border-top: 1px solid #dbdbdb">
     <div class="container">
         <div class="row">
             <div class="col-md-12 col-sm-12">
@@ -22,11 +22,75 @@
                         </div>
                     </div>
                 </div> -->
+                <!--Кнопка обратной связи-->
+                <div class="feedback">
+                    <button type="button" class="btn btn-outline-secondary btn-sm feedBack_button">Сделать сайт лучше</button>
+                </div>
+                <!---->
                 <div class="copyright">
-                    <div class="copyright-sfu text-center">© Сибирский федеральный университет, 2006-2021</div>
+                    <div class="copyright-sfu text-right sfu_copy">© Сибирский федеральный университет, 2006-2021</div>
                     <!-- <div class="copyright-sfu2">При использовании текстовых и графических материалов ссылка на сайт обязательна </div> -->
                 </div>
             </div>
         </div>
     </div>
 </footer>
+
+<script>
+
+    let winWidth = $(window).width();
+    let footer = document.querySelector(".footer");
+
+    if (winWidth < 1000) {
+        footer.classList.remove('fixed-bottom');
+    }else {
+        footer.classList.add('fixed-bottom');
+    }
+
+
+
+
+    $(window).resize(function() {
+        var curW = $(this).width(); 
+        
+        if (curW < 1000) {
+            footer.classList.remove('fixed-bottom');
+        } else {
+            footer.classList.add('fixed-bottom');
+        }
+    });
+</script>
+
+<!--Стили для кнопки обратоно связи-->
+<style>
+
+    .feedback {
+        position: absolute;
+        right: 10px;
+        top: 20px;
+    }
+
+    .btn-outline-secondary {
+        border-radius: 3px;
+    }
+
+    .btn-outline-secondary:hover {
+        transform: scale(1.03);
+    }
+
+    .btn-outline-secondary:focus {
+        box-shadow: none;
+    }
+
+    @media (max-width: 1000px) {
+        .feedBack_button {
+            display: none;
+        }
+
+        .sfu_copy {
+            text-align: center; 
+        }
+    }
+
+</style>
+<!---->
