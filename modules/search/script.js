@@ -354,8 +354,10 @@ find_text.addEventListener ('keydown', function (event){
             request.responseType = 'json';
             request.send();
             ////
+            //Открывает новое окно только в случае выбора подходящего запроса
+            window.open(str, '_blank');
         }
-        window.open(str, '_blank');
+        //window.open(str, '_blank');
         //new///
         find_text.blur();
         deleteList();
