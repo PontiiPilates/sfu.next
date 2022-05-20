@@ -1,4 +1,4 @@
-<footer class="footer fixed-bottom" style="border-top: 1px solid #dbdbdb">
+<footer class="footer mt-5" style="border-top: 1px solid #dbdbdb; height: 120px;">
     <div class="container">
         <div class="row">
             <div class="col-md-12 col-sm-12">
@@ -36,7 +36,7 @@
     </div>
 </footer>
 
-<script>
+<!-- <script>
 
     let winWidth = $(window).width();
     let footer = document.querySelector(".footer");
@@ -59,7 +59,7 @@
             footer.classList.add('fixed-bottom');
         }
     });
-</script>
+</script> -->
 
 <!--Стили для кнопки обратоно связи-->
 <style>

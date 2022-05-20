@@ -530,7 +530,7 @@ section:not(:first-child) {
 }
 
 .banner-image {
-  width              : 200%;
+  width              : 50%; /* фикс бага с непомерно большим изображением на слайде */
   height             : 100%;
   background-position: center;
   background-size    : cover;

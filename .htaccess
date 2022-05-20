@@ -15,8 +15,10 @@ RewriteEngine on
 # Перенаправление с http на https кроме некоторых путей
 RewriteCond %{HTTPS} off
 RewriteCond %{HTTP:X-Forwarded-Proto} !https
-RewriteCond %{THE_REQUEST} !/test.php [NC]      # Кроме путей, которые заканчиваются на /test.php
-RewriteCond %{THE_REQUEST} !/some/ [NC]         # Кроме путей, которые содержат в адресе дирректорию /some/
+# Кроме путей, которые заканчиваются на /test.php
+RewriteCond %{THE_REQUEST} !/test.php [NC]
+# Кроме путей, которые содержат в адресе дирректорию /some/
+RewriteCond %{THE_REQUEST} !/some/ [NC]
 RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
 </IfModule>

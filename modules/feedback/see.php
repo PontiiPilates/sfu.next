@@ -30,6 +30,8 @@ $res = $res->fetchAll(PDO::FETCH_ASSOC);
 
     <title>Search</title>
 
+    <link rel="icon" type="image/svg" href="/favicon.svg">
+
 </head>
 
 <body class="bg-dark text-light">
