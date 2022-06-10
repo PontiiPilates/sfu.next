@@ -1,0 +1,1 @@
+<footer class="footer search_footer fixed-bottom" style="border-top: 1px solid #dbdbdb;"></footer>

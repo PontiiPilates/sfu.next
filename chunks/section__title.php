@@ -1,1 +1,0 @@
-<a href="https://sfu-kras.ru" style="text-decoration: none;"><h1 class="main-head">Сибирский федеральный университет</h1></a>

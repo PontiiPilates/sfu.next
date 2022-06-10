@@ -1,0 +1,239 @@
+body {
+    width : 100%;
+    height: 100%;
+}
+
+/*new */
+#clean_btn {
+    margin-top: 13px !important;
+    border    : none !important;
+}
+
+#clean_btn:hover {
+    border          : none !important;
+    box-shadow      : none !important;
+    background-color: white !important;
+    color           : #E63E11 !important;
+    outline         : none !important;
+}
+
+#clean_btn:active {
+    box-shadow: none !important;
+    outline   : none !important;
+}
+
+#clean_btn:focus {
+    box-shadow: none !important;
+}
+
+/*new */
+
+.search_header {
+    width           : 100%;
+    height          : 50px;
+    display         : flex;
+    align-items     : center;
+    justify-content : center;
+    border-bottom   : 1px solid #dbdbdb;
+    background-color: #F8F9FA;
+}
+
+.search_header__middle_cont {
+    width: 800px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.feedBack_button {
+    border: none !important;
+}
+
+.main_content {
+    margin-top: 100px;
+    width     : 100%;
+}
+
+.icons {
+    margin-top: 0;
+    height    : 70px;
+    width     : 100px;
+    position  : relative;
+}
+
+/**new */
+.icons:hover>.icons__icon {
+    -webkit-transform: translateY(-5px);
+    transform        : translateY(-5px);
+    transition       : 0.3s;
+}
+
+.icons:hover>.icons__text {
+    color: rgba(230, 62, 17, 1) !important;
+}
+
+/**new */
+
+.icons__icon {
+    display   : block;
+    margin    : auto;
+    transition: 0.150s;
+}
+
+/**new */
+
+.icons__text {
+    margin        : 0 0 0 0;
+    font-style    : normal;
+    font-weight   : 400;
+    font-size     : 13px;
+    line-height   : 15px;
+    text-align    : center;
+    letter-spacing: -0.02em;
+    color         : #333333;
+    position      : absolute;
+    bottom        : 7px;
+    left          : 50%;
+    margin-right  : -50%;
+    transform     : translate(-50%, 0);
+}
+
+.search_form {
+    margin-top: 40px !important;
+    margin    : auto;
+    max-width : 800px;
+}
+
+.toMarginTop {
+    margin-top: 15px;
+}
+
+/*new */
+.find_count_result {
+    width     : 800px;
+    margin-top: 30px !important;
+    margin    : auto;
+}
+
+.find_item {
+    width     : 800px;
+    margin-top: 15px !important;
+    margin    : auto;
+}
+
+/*new */
+
+.find_item__item_link {
+    color: rgba(230, 62, 17, 1);
+}
+
+.find_item__item_text {
+    margin-top: 10px;
+    color     : #68717A;
+}
+
+.find_item__item_date {
+    font-size  : 12px;
+    line-height: 15px;
+    color      : #ABB5BE;
+}
+
+.navigation_count_page {
+    margin-top   : 60px !important;
+    margin-bottom: 60px !important;
+}
+
+.navigation_count_page__items {
+    margin: 0 5px 0 5px;
+    color : #ABB5BE;
+}
+
+.items__item_link {
+    color: #ABB5BE;
+}
+
+.active>.page-link,
+.page-link.active {
+    z-index         : 3;
+    color           : var(--bs-pagination-active-color);
+    background-color: #E63E11 !important;
+    border-color    : #E63E11 !important;
+}
+
+.add_feedback:hover {
+    background-color: #E63E11 !important;
+    border-color    : #E63E11 !important;
+}
+
+.search_form__search {
+    border-radius: 3px 0 0 3px !important;
+    border-right : none !important;
+}
+
+.search_form__find_btn {
+    border-radius: 0px 3px 3px 0px !important;
+    border-color : #CED4DA !important;
+    border       : 1px solid;
+}
+
+/*.search_form__sort_input {
+    width: 160px;
+  }
+
+  .search_form__part_input {
+    width: 110px;
+  }*/
+
+.search_form__find_btn:hover {
+    background-color: #E63E11 !important;
+    border-color    : #E63E11 !important;
+}
+
+.search_footer {
+    border-top      : 1px solid #dbdbdb;
+    background-color: #F8F9FA;
+    height          : 50px;
+
+}
+
+.feedbackWindow {
+    display: none;
+}
+
+.errorModalWindow {
+    display: none;
+}
+
+
+@media (max-width: 500px) {
+    .isWisible {
+        display: none;
+    }
+
+    .search_form {
+        width: 400px;
+    }
+
+    .search_header__middle_cont {
+        width: 400px;
+    }
+
+    /*.search_form__sort_input {
+      width: auto;
+    }
+
+    .search_form__part_input {
+      width: 130px;
+    }*/
+
+    .find_item {
+        width: 400px;
+    }
+
+    /*new */
+    .find_count_result {
+        width: 400px;
+    }
+
+    /*new */
+}
